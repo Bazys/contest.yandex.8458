@@ -1,13 +1,11 @@
-from typing import Tuple
+import sys
 
-def get_sum(a: int, b: int) -> int:
-    # Здесь реализация вашего решения
-    pass
+j = sys.stdin.readline().strip()
+s = sys.stdin.readline().strip()
 
-def read_input() -> Tuple[int, int]:
-    a = int(input())
-    b = int(input())
-    return a, b
+result = 0
+for ch in s:
+    if ch in j:
+        result += 1
 
-a, b = read_input()
-print(get_sum(a, b))
+print(result)

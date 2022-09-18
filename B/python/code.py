@@ -1,10 +1,16 @@
-def get_card_count(n, k, cards) -> int:
-    # your code goes here
-    return 0
+import sys
 
+count = sys.stdin.readline().strip()
 
-n = int(input())
-k = int(input())
-cards = list(map(int, input().split()))
+result = 0
+max = 0
+for i in range(int(count)):
+    el = sys.stdin.readline().strip()
+    if el == '1':
+        result += 1
+    else:
+        if max < result:
+            max = result
+        result = 0
 
-print(get_card_count(n, k, cards))
+print(max if max > result else result)

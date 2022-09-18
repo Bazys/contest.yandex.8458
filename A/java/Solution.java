@@ -1,16 +1,20 @@
-import java.util.Scanner;
+import java.io.*;
 
-public class Solution {
+public class WooHoo {
+    public static void main(String[] args) throws Exception {
+        BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 
-    private static int getSum(int a, int b) {
-        // Ваше решение
-    }
+        String J = r.readLine();
+        String S = r.readLine();
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int a = scanner.nextInt();
-        int b = scanner.nextInt();
-        System.out.println(getSum(a, b));
-        scanner.close();
+        int result = 0;
+        for (int i = 0; i < S.length(); ++i) {
+            char ch = S.charAt(i);
+            if (J.indexOf(ch) >= 0) {
+                ++result;
+            }
+        }
+
+        System.out.println(result);
     }
 }
