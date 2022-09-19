@@ -1,40 +1,32 @@
-#include <vector>
 #include <iostream>
+#include <set>
+#include <vector>
 
-using namespace std;
-
-struct Vertex {
-    int w;
-    int p;
-
-    Vertex(int w, int p) {
-        w = w;
-        p = p;
-    }
-};
-
-
-int getNumberOfUpgoingPaths(vector<Vertex> tree, int x) {
-    // your code goes here
-    return 0;
-}
-
-vector<Vertex> readTree(int n) {
-    vector<Vertex> tree;
-    for (int i = 0; i < n; i++) {
-        int parent, weight;
-        cin >> parent >> weight;
-        tree.push_back(Vertex(weight, parent));
-    }
-    return tree;
-}
+using ii = std::pair<int, int>;
+using vii = std::vector<ii>;
+using sii = std::set<ii>;
+using vsi = std::vector<sii>;
 
 int main() {
-    int n;
-    cin >> n;
-    int x;
-    cin >> x;
-    vector<Vertex> tree = readTree(n);
-    cout << getNumberOfUpgoingPaths(tree, x);
-
+  int n, k, from, to;
+  scanf("%d", &n);
+  vii cords(n);
+  for (auto &el : cords) {
+    int x, y;
+    scanf("%d %d", &x, &y);
+    el = ii(x, y);
+  }
+  scanf("%d", &k);
+  scanf("%d %d", &from, &to);
+  vsi G(n + 1, sii());
+  for (int i = 0; i < n; ++i) {
+    for (int j = i + 1; j < n; ++j) {
+      auto dist = abs(cords[i].first - cords[j].first) +
+                  abs(cords[i].second - cords[j].second);
+      if (k >= dist) {
+        G[i].insert(ii(j, dist));
+      }
+    }
+  }
+  return 0;
 }
