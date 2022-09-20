@@ -53,6 +53,10 @@ int BFS(vsi G, int from, int to) {
   return distance[to];
 }
 
+int dist(ii a, ii b) {
+  return abs(a.first - b.first) + abs(a.second - b.second);
+}
+
 int main() {
   //  freopen("code.txt", "r", stdin);
 
@@ -62,18 +66,20 @@ int main() {
   for (auto &el : cords) {
     int x, y;
     scanf("%d %d", &x, &y);
-    el = ii(x, y);
+    el = {x, y};
   }
   scanf("%d", &k);
   scanf("%d %d", &from, &to);
   from--;
   to--;
+  if (dist(cords[from], cords[to]) <= k) {
+    printf("1\n");
+    return 0;
+  }
   vsi G(n);
   for (int i = 0; i < n; ++i) {
     for (int j = i + 1; j < n; ++j) {
-      auto dist = abs(cords[i].first - cords[j].first) +
-                  abs(cords[i].second - cords[j].second);
-      if (k >= dist) {
+      if (k >= dist(cords[i], cords[j])) {
         G[i].insert(j);
         G[j].insert(i);
       }

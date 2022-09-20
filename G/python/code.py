@@ -1,31 +1,91 @@
-from typing import Dict
-
-class Node:
-    # feel free to change fields
-    def __init__(self, weight, parent) -> None:
-        self.weight = weight
-        self.parent = parent
-        self.children = []
-
-
-def get_number_of_upgoing_paths(root: Node, x: int) -> int:
-    # your code goes here
-    return 0
-
-def read_tree(tree_size: int) -> Node:
-    nodes = []
-    root = None
-    for i in range(tree_size):
-        p, w = map(int, input().split())
-        nodes.append(Node(w, p))
-        if p == -1:
-            root = nodes[i]
-    for i in range(tree_size):
-        if nodes[i].parent != -1:
-            nodes[nodes[i].parent].children.append(nodes[i])
-    return root
+def dist(a, b):
+    """
+    Считаем "метрику городских кварталов" L1:
+    https://ru.wikipedia.org/wiki/Расстояние_городских_кварталов
+    :param a: a = (x1, y1) - tuple with 1st coordinates
+    :param b: b = (x2, y2) - tuple with 2nd coordinates
+    :return: integer number
+    """
+    return abs(b[0] - a[0]) + abs(b[1] - a[1])
 
 
-n, x = map(int, input().split())
-tree = read_tree(n)
-print(get_number_of_upgoing_paths(tree, x))
+def BFS(G, s):
+    """
+    Алгоритм поиска в ширину (BFS). Он позволяет за время O(E), где Е - количество рёбер в графе, проверить достижимость
+    любой вершины v из стартовой вершины s, а также посчитать минимальное количество рёбер, необходимое для этого (стоимость пути).
+    :param s: int, индекс стартовой вершины графа.
+    :param G: List[List[int]], матрица смежности вершин графа (вершины, которые достижимы из каждой конкретной вершины).
+    :return: List[int], "стоимости" путей до всех вершин - минимальное количество ребёр графа, чтобы достигнуть каждую вершину из стартовой.
+    """
+    costs = [-1] * len(G)  # стоимость прохода до нужной вершины
+    costs[s] = 0  # стоимость пути из любой вершины графа в саму себя равна нулю
+    queue = [
+        s]  # для простоты создаём очередь в виде List, но для оптимизации лучше использовать связный список, например, queue.Queue()
+
+    while queue:
+        v = queue.pop(0)
+        # запускаем алгоритм обхода по вершинам графа:
+        for u in G[v]:
+            # проверяем каждую вершину, посещали её или нет:
+            if costs[u] == -1:
+                queue.append(u)  # если вершина не посещалась, добавляем её в очередь
+                costs[u] = costs[v] + 1  # увеличиваем стоимость пути
+
+    return costs
+
+
+def Task6(inpFile="input.txt"):
+    # получаем входные параметры из файла:
+    with open(inpFile, "r", encoding="UTF-8") as fH:
+        inpLines = fH.readlines()  # строки исходного входного файла
+        # удаляем ненужное окончание строк и читаем строки как числа:
+        n = int(inpLines[0])  # количество городов n (2 <= n <= 1000). Важно! Города пронумерованы от 1 до n
+        coordList = []  # сохраняем координаты как list of tuples
+
+        for item in inpLines[1: -2]:
+            # координата очередного города:
+            coordList.append(
+                (
+                    int(item.split(" ")[0]),
+                    int(item.split(" ")[1].rstrip("\n"))
+                )
+            )
+
+        k = int(inpLines[
+                    -2])  # число k <= 2 млрд., максимальное расстояние между городами, которое Петя может преодолеть без дозаправки машины
+
+        # читаем номера городов - начала и конца пути:
+        path = (
+            int(inpLines[-1].split(" ")[0]),
+            int(inpLines[-1].split(" ")[1].rstrip("\n"))
+        )
+
+    city1Coord = coordList[path[0] - 1]  # координата первого города по индексу из списка всех городов
+    city2Coord = coordList[path[1] - 1]  # координата второго города по индексу из списка всех городов
+
+    # Если расстояние между 1 и 2 городами сразу меньше либо равно k (доступный бензин), то путь сразу равен 1
+    if dist(city1Coord, city2Coord) <= k:
+        result = 1
+
+    else:
+        # Предварительно создаём список достижимости городов - это матрица смежности каждого города с каждым другим городом,
+        # если до него хватает бензина. В список заносим только индексы достижимых городов.
+        # Если начальный и конечный город совпадают, отмечаем это как достижимый город.
+        adjList = [
+            [index for index, city1 in enumerate(coordList) if dist(city1, city2) <= k] for city2 in coordList
+        ]
+
+        # считаем стоимости всех путей из стартового города до всех остальных достижимых городов:
+        costs = BFS(adjList, path[0] - 1)
+
+        # получаем стоимость пути до конечного города, -1 если такого пути нет, либо он недостижим:
+        result = costs[path[1] - 1]
+
+    with open("output.txt", "w", encoding="UTF-8") as fH:
+        fH.write(str(result))
+
+    return result
+
+
+if __name__ == "__main__":
+    print(Task6(inpFile="input.txt"))

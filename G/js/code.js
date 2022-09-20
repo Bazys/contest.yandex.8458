@@ -1,57 +1,52 @@
-class Vertex {
-    constructor(weight, parent) {
-        this.weight = weight;
-        this.parent = parent;
+function solve(data) {
+    data = data.trim().split('\n');
+
+    const n = Number(data[0]);
+    const names = new Set(data.slice(1, n + 1));
+    const maxDistance = Number(data[n + 1]);
+
+    const coords = {};
+    for (let name of names) {
+        const [x, y] = name.split(/\s+/);
+        coords[name] = [x, y];
     }
-}
 
-function getNumberOfUpgoingPaths(tree, x) {
-    // your code goes here
-    return 0;
-}
+    const [start, finish] = data[n + 2].split(/\s+/);
+    const startTown = data[start];
+    const finishTown = data[finish];
 
-const _readline = require('readline');
+    let nextStep = [new Set([startTown])];
+    let stepsCount = 0;
+    names.delete(startTown);
 
-const _reader = _readline.createInterface({
-    input: process.stdin
-});
+    while (nextStep[stepsCount].size) {
+        const prevStepsCount = stepsCount;
+        ++stepsCount;
+        nextStep.push(new Set());
 
-const _inputLines = [];
-let _curLine = 0;
+        for (let from of nextStep[prevStepsCount]) {
+            const [fromX, fromY] = coords[from];
 
-_reader.on('line', line => {
-    _inputLines.push(line);
-});
+            for (let to of names) {
+                const [toX, toY] = coords[to];
 
-process.stdin.on('end', solve);
+                if (Math.abs(toX - fromX) + Math.abs(toY - fromY) <= maxDistance) {
+                    if (to === finishTown) return stepsCount;
 
+                    nextStep[stepsCount].add(to);
+                }
+            }
+        }
 
-function solve() {
-    const firsLine = readArray();
-    const n = firsLine[0];
-    const x = firsLine[1];
-    const tree = readTree(n);
-    const ans = getNumberOfUpgoingPaths(tree, x);
-    console.log(ans);    
-}
-
-function readInt() {
-    const n = Number(_inputLines[_curLine]);
-    _curLine++;
-    return n;
-}
-
-function readArray() {
-    var arr = _inputLines[_curLine].trim(" ").split(" ").map(num => Number(num));
-    _curLine++;
-    return arr;
-}
-
-function readTree(n) {
-    let tree = [];
-    for (let i = 0; i < n; i++) {
-        let vertex = readArray();
-        tree.push(new Vertex(vertex[1], vertex[0]));
+        for (let town of nextStep[stepsCount]) {
+            names.delete(town);
+        }
     }
-    return tree;
+
+    return -1;
 }
+
+const fs = require('fs');
+const content = fs.readFileSync('input.txt', 'utf8');
+const result = solve(content);
+fs.writeFileSync('output.txt', result + '');
