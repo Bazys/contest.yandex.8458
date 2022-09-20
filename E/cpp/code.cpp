@@ -6,8 +6,7 @@ int main() {
   std::string s1, s2;
   std::cin >> s1;
   std::cin >> s2;
-  auto n = s1.size();
-  if (n != s2.size()) {
+  if (s1.size() != s2.size()) {
     printf("0\n");
     return 0;
   }

@@ -1,8 +1,10 @@
-def get_number_of_good_pairs(numbers) -> int:
-    # your code goes here
-    return 0
+import sys
 
+count = sys.stdin.readline().strip()
 
-n = int(input())
-numbers = list(map(int, input().split()))
-print(get_number_of_good_pairs(numbers))
+ch = -1
+for i in range(int(count)):
+    el = sys.stdin.readline().strip()
+    if el != ch:
+        print(el)
+    ch = el
