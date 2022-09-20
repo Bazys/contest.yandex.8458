@@ -36,24 +36,19 @@ using vsi = std::vector<si>;
 using vi = std::vector<int>;
 
 int BFS(vsi G, int from, int to) {
-  vi distance(G.size(), 1e9);  // массив расстояний
+  vi distance(G.size(), -1);  // массив расстояний
   distance[from] = 0;  // расстояние до начальной точки
   std::queue<int> q;   // очередь FIFO
   q.push(from);        // начинаем со стартовой точки
   while (!q.empty()) {  // пока очередь не опустеет
     auto u = q.front();  // извлекаем первый элемент из очереди
-    q.pop();                        // и удаляем
-    for (const auto item : G[u]) {  // перебираем все смежные вершины
-      if (distance[item] == 1e9) {  // если эту вершину ещё не посетили
-        q.push(item);  // добавляем в очередь
-        if (distance[item] > distance[u] + 1) {  // нашли более короткий путь
-          distance[item] = distance[u] + 1;  //
-        }
+    q.pop();                     // и удаляем
+    for (const auto v : G[u]) {  // перебираем все смежные вершины
+      if (distance[v] == -1) {  // если эту вершину ещё не посетили
+        q.push(v);  // добавляем в очередь
+        distance[v] = distance[u] + 1;  // записываем расстояние до вершины v
       }
     }
-  }
-  if (distance[to] == 1e9) {
-    return -1;
   }
   return distance[to];
 }
