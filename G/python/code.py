@@ -1,6 +1,3 @@
-import os
-
-
 def dist(a, b):
     """
     Считаем "метрику городских кварталов" L1:
@@ -58,13 +55,11 @@ def main(inpFile="input.txt"):
                     -2])  # число k <= 2 млрд., максимальное расстояние между городами, которое Петя может преодолеть без дозаправки машины
 
         # читаем номера городов - начала и конца пути:
-        path = (
-            int(inpLines[-1].split(" ")[0])-1,
-            int(inpLines[-1].split(" ")[1].rstrip("\n"))-1
-        )
+        start = int(inpLines[-1].split(" ")[0])-1
+        end = int(inpLines[-1].split(" ")[1].rstrip("\n"))-1
 
     # Если расстояние между 1 и 2 городами сразу меньше либо равно k (доступный бензин), то путь сразу равен 1
-    if dist(coordList[path[0]], coordList[path[1]] ) <= k:
+    if dist(coordList[start], coordList[end] ) <= k:
         costs = 1
 
     else:
@@ -77,7 +72,7 @@ def main(inpFile="input.txt"):
 
         # считаем стоимости всех путей из стартового города до всех остальных достижимых городов:
         # получаем стоимость пути до конечного города, -1 если такого пути нет, либо он недостижим:
-        costs = BFS(adjList, path[0], path[1])
+        costs = BFS(adjList, start, end)
 
     with open("output.txt", "w", encoding="UTF-8") as fH:
         fH.write(str(costs))
@@ -86,6 +81,4 @@ def main(inpFile="input.txt"):
 
 
 if __name__ == "__main__":
-    inpFile=os.getcwd() + "/input.txt"
-    # print(Task6(inpFile="input.txt"))
-    print(main(inpFile))
+    print(main(inpFile="input.txt"))

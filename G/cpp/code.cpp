@@ -79,7 +79,7 @@ int BFS(vsi G, int start, int end) {
 int main() {
   //  freopen("input.txt", "r", stdin);
 
-  int n, k, from, to;
+  int n, k, start, end;
   scanf("%d", &n);
   vii cords(n);
   for (auto &el : cords) {
@@ -88,10 +88,10 @@ int main() {
     el = {x, y};
   }
   scanf("%d", &k);
-  scanf("%d %d", &from, &to);
-  from--;
-  to--;
-  if (dist(cords[from], cords[to]) <= k) {
+  scanf("%d %d", &start, &end);
+  start--;
+  end--;
+  if (dist(cords[start], cords[end]) <= k) {
     printf("1\n");
     return 0;
   }
@@ -105,7 +105,7 @@ int main() {
     }
   }
 
-  printf("%d\n", BFS(G, from, to));
+  printf("%d\n", BFS(G, start, end));
 
   return 0;
 }
