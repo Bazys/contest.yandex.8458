@@ -35,30 +35,49 @@ using si = std::set<int>;
 using vsi = std::vector<si>;
 using vi = std::vector<int>;
 
-int BFS(vsi G, int from, int to) {
+/**
+ * @brief
+ * Считаем "метрику городских кварталов"
+ * https://ru.wikipedia.org/wiki/Расстояние_городских_кварталов
+ * @param a std::pair<int, int> координаты начальной точки
+ * @param b std::pair<int, int> коордмнаты конечной точки
+ * @return int
+ */
+int dist(ii a, ii b) {
+  return abs(a.first - b.first) + abs(a.second - b.second);
+}
+
+/**
+ * @brief
+ * Алгоритм поиска в ширину (BFS). Он позволяет за время O(E), где Е -
+ * количество рёбер в графе, проверить достижимость любой вершины v из стартовой
+ * вершины s, а также посчитать минимальное количество рёбер, необходимое для
+ * этого (длину пути).
+ * @param G std::vector<std::set<int>> граф в виде списка смежности (0-indexed)
+ * @param start int номер начальной точки (0-indexed)
+ * @param end int номер конечной точки (0-indexed)
+ * @return int длина пути из start в end
+ */
+int BFS(vsi G, int start, int end) {
   vi distance(G.size(), -1);  // массив расстояний
-  distance[from] = 0;  // расстояние до начальной точки
+  distance[start] = 0;  // расстояние до начальной точки
   std::queue<int> q;   // очередь FIFO
-  q.push(from);        // начинаем со стартовой точки
+  q.push(start);        // начинаем со стартовой точки
   while (!q.empty()) {  // пока очередь не опустеет
     auto u = q.front();  // извлекаем первый элемент из очереди
     q.pop();                     // и удаляем
     for (const auto v : G[u]) {  // перебираем все смежные вершины
       if (distance[v] == -1) {  // если эту вершину ещё не посетили
-        q.push(v);  // добавляем в очередь
+        q.push(v);  // добавляем в конец очереди
         distance[v] = distance[u] + 1;  // записываем расстояние до вершины v
       }
     }
   }
-  return distance[to];
-}
-
-int dist(ii a, ii b) {
-  return abs(a.first - b.first) + abs(a.second - b.second);
+  return distance[end];
 }
 
 int main() {
-  //  freopen("code.txt", "r", stdin);
+  //  freopen("input.txt", "r", stdin);
 
   int n, k, from, to;
   scanf("%d", &n);
@@ -79,7 +98,7 @@ int main() {
   vsi G(n);
   for (int i = 0; i < n; ++i) {
     for (int j = i + 1; j < n; ++j) {
-      if (k >= dist(cords[i], cords[j])) {
+      if (dist(cords[i], cords[j])<=k) {
         G[i].insert(j);
         G[j].insert(i);
       }
