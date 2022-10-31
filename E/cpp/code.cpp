@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <map>
 
 int main() {
   std::string s1, s2;

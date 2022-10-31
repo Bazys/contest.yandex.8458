@@ -77,7 +77,7 @@ int BFS(vsi G, int start, int end) {
 }
 
 int main() {
-  //  freopen("input.txt", "r", stdin);
+  //  freopen("../input.txt", "r", stdin);
 
   int n, k, start, end;
   scanf("%d", &n);

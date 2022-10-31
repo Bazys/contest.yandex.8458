@@ -47,6 +47,6 @@ function solve(data) {
 }
 
 const fs = require('fs');
-const content = fs.readFileSync('input.txt', 'utf8');
+const content = fs.readFileSync('../input.txt', 'utf8');
 const result = solve(content);
-fs.writeFileSync('output.txt', result + '');
+fs.writeFileSync('../output.txt', result + '');

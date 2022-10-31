@@ -1,6 +1,5 @@
-def convert_to_arabic(number: str) -> int:
-    # your code goes here
-    return -1
-
-roman_number = input()
-print(convert_to_arabic(roman_number))
+def anagram(s1, s2):
+    if len(s1) != len(s2):
+        return False
+    else:
+        return sorted(s1) == sorted(s2)

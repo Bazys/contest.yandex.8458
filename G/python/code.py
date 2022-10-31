@@ -81,4 +81,4 @@ def main(inpFile="input.txt"):
 
 
 if __name__ == "__main__":
-    print(main(inpFile="input.txt"))
+    print(main(inpFile="../input.txt"))
